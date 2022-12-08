@@ -1,11 +1,8 @@
-const fs = require('node:fs');
-const path = require("path");
-
 // const fs = require('node:fs').promises;
 // const path = require("path");
-
-console.log(__dirname);
-console.log(__filename);
+//
+// console.log(__dirname);
+// console.log(__filename);
 
 // fs.readFile('./app.js', (err, data) => {
 //     if(err){
@@ -91,7 +88,7 @@ console.log(__filename);
 //         console.log(e);
 //     })
 
-// const DecemberPath = path.join(__dirname,'December')
+// const DecemberPath = path.join(__dirname,'DECEMBER')
 // fs.readdir(DecemberPath, {withFileTypes: true}).then(files =>{
 //     files.forEach(file => {
 //         console.log(file);
@@ -101,18 +98,18 @@ console.log(__filename);
 
 // fs.truncate('./data.txt').then()
 
-let readStream = fs.createReadStream(path.join(__dirname,'data.txt'));
-let writeStream = fs.createWriteStream(path.join(__dirname,'data_1.txt'));
-
-readStream
-    .on('data', (chunk) => {
-        console.log(chunk);
-    })
-    .on('end', () => {
-        console.log('File end')
-    })
-
-writeStream
-    .write('god job')
+// let readStream = fs.createReadStream(path.join(__dirname,'data.txt'));
+// let writeStream = fs.createWriteStream(path.join(__dirname,'data_1.txt'));
+//
+// readStream
+//     .on('data', (chunk) => {
+//         console.log(chunk);
+//     })
+//     .on('end', () => {
+//         console.log('File end')
+//     })
+//
+// writeStream
+//     .write('god job')
 
 
