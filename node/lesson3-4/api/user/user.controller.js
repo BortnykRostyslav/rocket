@@ -1,39 +1,48 @@
-const users = require("../../dataBase/users");
-const usersService = require("./user.service");
+const users = require("../../dataBase/users.json");
+const userService = require("./user.service");
 
 
 module.exports = {
     getAllUsers: (req, res) => {
-       res.json(users);
+        res.json(users);
     },
 
-    createUser: (req, res) => {
-        console.log(req.body);
-
-        res.json('Hello Test Chat');
-    },
-
-    getUserById: (req, res) => {
+    createUser: async (req, res) => {
         try {
-            console.log(req.params);
+            await userService.addUser(req.body);
+            res.status(201).json('User add JSON File');
+        } catch (e) {
+            res.status(400).json(e.message);
+        }
+    },
 
-            const user = usersService.getSingleUser(req.params.userId);
-
+    getUserById: async (req, res) => {
+        try {
+            const user = await userService.getSingleUser(req.params.userId);
             res.json(user);
         } catch (e) {
             res.status(400).json(e.message);
         }
     },
 
-    updateUser: (req, res) => {
-        console.log(req);
+    updateUser: async (req, res) => {
+        try {
+            await  userService.updateUser(req.params.userId,req.body)
+            res.json('Update user');
+        }catch (e) {
+            res.status(400).json(e);
+        }
 
-        res.json('Hello Test friend');
+
     },
 
-    deleteUser: (req, res) => {
-        console.log(req);
+    deleteUser: async (req, res) => {
+        try {
+            await userService.deleteUser(req.params.userId)
+            res.json('Delete user');
+        }catch (e){
+            res.status(400).json(e);
+        }
 
-        res.json('Hello Test friend');
     }
 }
