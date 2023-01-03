@@ -7,30 +7,30 @@ module.exports = {
        res.json(users);
     },
 
-    createUser: async (req, res) => {
+    createUser: async (req, res, next) => {
         try {
             const createdUser = await usersService.createUser(req.body);
 
             res.status(201).json(createdUser);
         } catch (e){
-            res.status(404).json(e.message);
+            next(e);
         }
     },
 
-    getUserById: async  (req, res) => {
+    getUserById: async  (req, res, next) => {
         try {
-            console.log(req.user);
-
             res.json(req.user);
         } catch (e) {
-            res.status(400).json(e.message);
+            next(e);
         }
     },
 
     updateUser: (req, res) => {
-        console.log(req);
-
-        res.json('Hello Test friend');
+        try{
+            res.json('Hello Test friend');
+        } catch (e){
+            console.log(e)
+        }
     },
 
     deleteUser: (req, res) => {
