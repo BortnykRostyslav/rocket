@@ -7,19 +7,21 @@ module.exports = {
        res.json(users);
     },
 
-    createUser: (req, res) => {
-        console.log(req.body);
+    createUser: async (req, res) => {
+        try {
+            const createdUser = await usersService.createUser(req.body);
 
-        res.json('Hello Test Chat');
+            res.status(201).json(createdUser);
+        } catch (e){
+            res.status(404).json(e.message);
+        }
     },
 
-    getUserById: (req, res) => {
+    getUserById: async  (req, res) => {
         try {
-            console.log(req.params);
+            console.log(req.user);
 
-            const user = usersService.getSingleUser(req.params.userId);
-
-            res.json(user);
+            res.json(req.user);
         } catch (e) {
             res.status(400).json(e.message);
         }
