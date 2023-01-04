@@ -1,10 +1,12 @@
-const users = require("../../dataBase/users");
-const usersService = require("./user.service");
+const users = require('../../dataBase/users.json');
+const usersService = require('./user.service');
+const {raw} = require('express');
 
 
 module.exports = {
-    getAllUsers: (req, res) => {
-       res.json(users);
+    getAllUsers: async (req, res) => {
+        const allUsers = await usersService.getAllUsers();
+        res.json(allUsers);
     },
 
     createUser: async (req, res, next) => {
@@ -12,12 +14,12 @@ module.exports = {
             const createdUser = await usersService.createUser(req.body);
 
             res.status(201).json(createdUser);
-        } catch (e){
+        } catch (e) {
             next(e);
         }
     },
 
-    getUserById: async  (req, res, next) => {
+    getUserById: async (req, res, next) => {
         try {
             res.json(req.user);
         } catch (e) {
@@ -25,17 +27,22 @@ module.exports = {
         }
     },
 
-    updateUser: (req, res) => {
-        try{
-            res.json('Hello Test friend');
-        } catch (e){
-            console.log(e)
+    updateUser: async (req, res) => {
+        try {
+            const updatedUser = await usersService.updateUser(req.params.userId, req.body);
+            res.json(updatedUser);
+        } catch (e) {
+            console.log(e);
         }
     },
 
-    deleteUser: (req, res) => {
-        console.log(req);
+    deleteUser: async (req, res, next) => {
+        try {
+            await usersService.deleteUserById(req.params.userId);
 
-        res.json('Hello Test friend');
+            res.status(204).end();
+        } catch (e) {
+            next(e);
+        }
     }
-}
+};

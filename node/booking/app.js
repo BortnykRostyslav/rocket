@@ -2,13 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config({path: path.join(__dirname, 'env', `.env.${process.env.NODE_ENV || 'local'}`)});
-
-
+global.rootPath = __dirname;
 
 const mainRouter = require('./api/api.router');
- const {PORT, MONGO_URL} = require('./configs/variables');
+const {PORT, MONGO_URL} = require('./configs/variables');
+const ApiError = require('./errors/ApiError');
+const {SERVER_ERROR} = require('./errors/errors.codes');
+const {NotFound} = require("./errors/ApiError");
 
 const app = express();
+
+
 
 mongoose.set('debug', true);
 mongoose.set('strictQuery', true);
@@ -28,12 +32,12 @@ app.listen(PORT, () =>{
 
 
 function _notFoundError (req, res, next){
-    next(new ApiError('Route not found', 404));
+    next(new NotFound('Route not found'));
 }
 
 function _mainErrorHandler(err,req, res, next){
     res
-        .status(err.status || 500)
+        .status(err.status || SERVER_ERROR)
         .json({
             message: err.message || 'Unknown error'
         })
