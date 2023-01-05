@@ -21,7 +21,7 @@ module.exports = {
 
     checkIsRegistryBodyValid: async (req, res, next) => {
         try {
-            const {firstName, lastName, password, age} = req.body;
+            const {firstName, lastName, password, age, email} = req.body;
 
             if (typeof firstName !== 'string' || firstName.length <= 2) {
                 throw new Forbidden('Incorrect Name');
@@ -39,7 +39,6 @@ module.exports = {
                 throw new Forbidden('Incorrect Age');
             }
 
-            const {email} = req.body;
             const findEmail = await usersService.findUserByParams({email});
 
             if (!email || !EmailValidUniq(email)) {
