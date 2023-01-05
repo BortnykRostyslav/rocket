@@ -31,7 +31,7 @@ module.exports = {
                 throw new Forbidden('Incorrect LastName');
             }
 
-            if (typeof password !== 'string' || !password || password.length < 8) {
+            if (typeof password !== 'string' || password.length < 8) {
                 throw new Forbidden('Incorrect Password');
             }
 
