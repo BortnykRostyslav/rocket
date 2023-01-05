@@ -23,9 +23,9 @@ function buildFilterQuery(query = {}){
 
     if(query.search){
         filterQuery.$or = [
-        { firsName: { $regex: query.search, $options: 'i' } },
-        { lastName: { $regex: query.search, $options: 'i' } },
-        { email: { $regex: query.search, $options: 'i' } }
+            { firsName: { $regex: query.search, $options: 'i' } },
+            { lastName: { $regex: query.search, $options: 'i' } },
+            { email: { $regex: query.search, $options: 'i' } }
         ];
     }
 

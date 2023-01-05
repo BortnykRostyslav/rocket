@@ -39,7 +39,7 @@ module.exports = {
             .find(search)
             .limit(perPage)
             .skip(skip);
-            // .sort({[sortBy]: [order] });
+        // .sort({[sortBy]: [order] });
 
         console.log(search);
 
