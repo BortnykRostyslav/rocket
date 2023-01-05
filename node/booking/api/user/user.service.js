@@ -18,6 +18,10 @@ module.exports = {
     },
 
     deleteUserById: async (userId) => {
-        return User.deleteOne(userId);
+        return User.deleteOne({_id:userId});
+    },
+
+    findUserByParams: async (filter) => {
+        return User.findOne(filter);
     }
 };

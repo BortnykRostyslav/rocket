@@ -4,6 +4,7 @@ module.exports = {
     getAllUsers: async (req, res, next) => {
         try{
             const allUsers = await usersService.getAllUsers(req.body);
+
             res.json(allUsers);
         } catch (e){
             next(e)
@@ -31,6 +32,7 @@ module.exports = {
     updateUser: async (req, res) => {
         try {
             const updatedUser = await usersService.updateUser(req.params.userId, req.body);
+
             res.json(updatedUser);
         } catch (e) {
             console.log(e);
@@ -39,9 +41,9 @@ module.exports = {
 
     deleteUser: async (req, res, next) => {
         try {
-            await usersService.deleteUserById(req.params.userId);
+            const deleteUser = await usersService.deleteUserById(req.params.userId);
 
-            res.status(204).end('User delete');
+            res.json(deleteUser);
         } catch (e) {
             next(e);
         }
