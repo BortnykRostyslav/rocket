@@ -35,7 +35,7 @@ module.exports = {
                 throw new Forbidden('Incorrect Password');
             }
 
-            if (typeof age !== 'number' || age <= 0) {
+            if (typeof age !== 'number' || age <= 0 || age > 101) {
                 throw new Forbidden('Incorrect Age');
             }
 
