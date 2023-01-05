@@ -1,12 +1,13 @@
-const users = require('../../dataBase/users.json');
 const usersService = require('./user.service');
-const {raw} = require('express');
-
 
 module.exports = {
-    getAllUsers: async (req, res) => {
-        const allUsers = await usersService.getAllUsers(req.query);
-        res.json(allUsers);
+    getAllUsers: async (req, res, next) => {
+        try{
+            const allUsers = await usersService.getAllUsers(req.body);
+            res.json(allUsers);
+        } catch (e){
+            next(e)
+        }
     },
 
     createUser: async (req, res, next) => {
@@ -40,7 +41,7 @@ module.exports = {
         try {
             await usersService.deleteUserById(req.params.userId);
 
-            res.status(204).end();
+            res.status(204).end('User delete');
         } catch (e) {
             next(e);
         }
