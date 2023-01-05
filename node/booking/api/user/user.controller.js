@@ -5,7 +5,7 @@ const {raw} = require('express');
 
 module.exports = {
     getAllUsers: async (req, res) => {
-        const allUsers = await usersService.getAllUsers();
+        const allUsers = await usersService.getAllUsers(req.query);
         res.json(allUsers);
     },
 

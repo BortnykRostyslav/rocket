@@ -1,7 +1,8 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
-//const User = require('../../dataBase/User');
+const User = require('../../dataBase/User');
+const {buildFilterQuery} = require('./user.util');
 
 const usersPath = path.join(global.rootPath, 'dataBase', 'users.json');
 
@@ -28,10 +29,28 @@ module.exports = {
      * @returns {Promise<Array<Object>>}
      */
 
-    getAllUsers: async () => {
-        const usersJson = await fs.readFile(usersPath);
+    getAllUsers: async (query = {}) => {
+        const { page = 1, perPage = 3, sortBy, order = 'ASC', ...filterQuery } = query;
+        const skip = (page - 1) * perPage;
 
-        return JSON.parse(usersJson);
+        const search = buildFilterQuery(filterQuery);
+
+        const users = await User
+            .find(search)
+            .limit(perPage)
+            .skip(skip);
+            // .sort({[sortBy]: [order] });
+
+        console.log(search);
+
+        const total = await User.countDocuments(search);
+
+        return {
+            data: users,
+            page,
+            perPage,
+            total
+        };
     },
 
     updateUser: async (userId, newUserObject) => {
