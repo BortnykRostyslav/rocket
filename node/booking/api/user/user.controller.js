@@ -1,7 +1,4 @@
-const users = require('../../dataBase/users.json');
 const usersService = require('./user.service');
-const {raw} = require('express');
-
 
 module.exports = {
     getAllUsers: async (req, res) => {

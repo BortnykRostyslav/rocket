@@ -7,8 +7,9 @@ userRouter.get('/', controller.getAllUsers);
 userRouter.post('/', mdlwr.newUserValidator, controller.createUser);
 
 userRouter.use('/:userId',mdlwr.checkIsUserExists);
+
 userRouter.get('/:userId', controller.getUserById);
-userRouter.put('/:userId', controller.updateUser);
+userRouter.put('/:userId', mdlwr.newUserValidator, controller.updateUser);
 userRouter.delete('/:userId', controller.deleteUser);
 
 module.exports = userRouter;
