@@ -1,5 +1,6 @@
 const usersService = require("./user.service");
-const {NotFound} = require("../../errors/ApiError");
+const {NotFound, BadRequest} = require("../../errors/ApiError");
+const {newUserSchema} = require('./user.validator');
 
 module.exports = {
     checkIsUserExists: async (req, res, next) => {
@@ -16,5 +17,20 @@ module.exports = {
         } catch (e){
             next(e);
         }
+    },
+
+    newUserValidator: async (req, res, next) => {
+        try {
+            const { error, value } = newUserSchema.validate(req.body);
+
+            if (error){
+                throw new BadRequest(error);
+            }
+
+            req.body = value;
+            next();
+        } catch (e){
+            next(e);
+        }
     }
-}
+};

@@ -78,13 +78,6 @@ module.exports = {
     },
 
     createUser: async (userObject) => {
-        //return User.create(userObject);
-        const users = await module.exports.getAllUsers();
-
-        const userId = (users[users.length -1]?.id || 0) + 1;
-
-        users.push({id: userId,...userObject});
-
-        await fs.writeFile(usersPath, JSON.stringify(users));
+        return User.create(userObject);
     }
 };
