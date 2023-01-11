@@ -1,6 +1,14 @@
 const usersService = require('./user.service');
 
 module.exports = {
+    getMyProfile: (req, res, next) => {
+        try {
+            res.status('ok');
+        } catch (e) {
+            next(e);
+        }
+    },
+
     getAllUsers: async (req, res) => {
         const allUsers = await usersService.getAllUsers(req.query);
         res.json(allUsers);

@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const {BadRequest} = require('../errors/ApiError');
+const {BadRequest, Unauthorized} = require('../errors/ApiError');
+const {REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET} = require('../configs/variables');
 
 const hashPassword = (password) => bcrypt.hash(password, 10);
 
@@ -13,7 +14,33 @@ const checkPassword = async (hashedPassword, password) => {
     }
 };
 
+const generateNewAccessTokenPair = (encodeData = {}) => {
+    const accessToken = jwt.sign(encodeData, ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+    const refreshToken = jwt.sign(encodeData, REFRESH_TOKEN_SECRET, {expiresIn: '30d'});
+
+    return{
+        accessToken,
+        refreshToken
+    };
+};
+
+const validateToken = () => {
+
+};
+
+const validateAccessToken = (accessToken = '') => {
+    try {
+        return jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+    } catch (e) {
+        throw new Unauthorized(e.message || 'Invalid token');
+    }
+
+}
+
 module.exports = {
     hashPassword,
-    checkPassword
+    checkPassword,
+    generateNewAccessTokenPair,
+    validateToken,
+    validateAccessToken
 };

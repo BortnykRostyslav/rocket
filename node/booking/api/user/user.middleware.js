@@ -1,12 +1,14 @@
 const usersService = require('./user.service');
-const {Forbidden, NotFound, BadRequest} = require('../../errors/ApiError');
+const {NotFound, BadRequest} = require('../../errors/ApiError');
 const {newUserSchema} = require('./user.validator');
 const authService = require('../auth/auth.service');
 
 module.exports = {
-    checkIsUserExists: async (req, res, next) => {
+    getUserDynamically: (paramName, from, dbField = paramName) => async (req, res, next) => {
         try {
-            const user = await usersService.findUserByParams({ _id: req.params.userId});
+            const searchData = req[from][paramName];
+
+            const user = await usersService.findUserByParams({[dbField]: searchData});
 
             if (!user) {
                 throw new NotFound('User not found');
@@ -20,15 +22,15 @@ module.exports = {
         }
     },
 
-    findUserByEmail: async (req, res, next) => {
+    checkUserDuplicates: (paramName, from, dbField = paramName) => async (req, res, next) => {
         try {
-            const user = await usersService.findUserByParams({email: req.body.email});
+            const searchData = req[from][paramName];
 
-            if (!user) {
-                throw new NotFound('User not found');
+            const user = await usersService.findUserByParams({[dbField]: searchData});
+
+            if (user) {
+                throw new NotFound('User with such info already exists');
             }
-
-            req.user = user;
 
             next();
         } catch (e) {
