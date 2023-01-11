@@ -1,4 +1,5 @@
 const usersService = require('./user.service');
+const {CREATED, NO_CONTENT} = require('../../errors/errors.codes');
 
 module.exports = {
     getMyProfile: (req, res, next) => {
@@ -18,7 +19,7 @@ module.exports = {
         try {
             const createdUser = await usersService.createUser(req.body);
 
-            res.status(201).json(createdUser);
+            res.status(CREATED).json(createdUser);
         } catch (e) {
             next(e);
         }
@@ -45,7 +46,7 @@ module.exports = {
         try {
             await usersService.deleteUserById(req.params.userId);
 
-            res.status(204).end();
+            res.status(NO_CONTENT).end();
         } catch (e) {
             next(e);
         }
