@@ -14,7 +14,7 @@ module.exports = {
                 throw new NotFound('User not found');
             }
 
-            req.user = user;
+            req.locals = {...req.locals,user};
 
             next();
         } catch (e) {

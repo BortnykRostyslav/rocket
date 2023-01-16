@@ -1,10 +1,10 @@
 {
-  "name": "lesson3",
+  "name": "booking",
   "version": "1.0.0",
   "description": "Hello friend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "author": "Bortnyk Rostyslav",
   "license": "ISC",

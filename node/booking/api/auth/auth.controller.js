@@ -4,10 +4,10 @@ const oauthService = require('../../services/oauth.service');
 module.exports = {
     loginUser: async (req, res, next) => {
         try {
-            const user = req.user.toObject();
+            const user = req.locals.user;
 
             await oauthService.checkPassword(user.password, req.body.password);
-            const tokenPair = oauthService.generateNewAccessTokenPair(user);
+            const tokenPair = oauthService.generateNewAccessTokenPair({...user});
 
             await service.createOauthPair({...tokenPair, user: user._id});
             res.json({

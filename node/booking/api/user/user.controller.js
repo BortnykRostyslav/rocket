@@ -27,7 +27,7 @@ module.exports = {
 
     getUserById: async (req, res, next) => {
         try {
-            res.json(req.user);
+            res.json(req.locals.user);
         } catch (e) {
             next(e);
         }

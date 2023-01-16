@@ -2,9 +2,6 @@ const User = require('../../dataBase/User');
 const {buildFilterQuery} = require('./user.util');
 const oauthService = require('../../services/oauth.service');
 
-
-
-
 module.exports = {
 
     /**
