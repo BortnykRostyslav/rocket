@@ -1,10 +1,13 @@
 const service = require('./auth.service');
 const oauthService = require('../../services/oauth.service');
+const {NO_CONTENT} = require('../../errors/errors.codes');
 
 module.exports = {
     loginUser: async (req, res, next) => {
         try {
             const user = req.locals.user;
+
+
 
             await oauthService.checkPassword(user.password, req.body.password);
             const tokenPair = oauthService.generateNewAccessTokenPair({...user});
@@ -17,5 +20,18 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    logoutUser: async (req, res, next) => {
+        try {
+            const accessToken = req.get('Authorization');
+            await service.deleteOneByParams({accessToken});
+
+            // const accessToken = req.get('Authorization');
+            // await service.deleteManyByParams({user: req.user._id});
+            res.status(NO_CONTENT).json('ok');
+        } catch (e) {
+            next(e);
+        }
+    },
 };

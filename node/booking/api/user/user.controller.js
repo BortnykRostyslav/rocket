@@ -4,7 +4,12 @@ const {CREATED, NO_CONTENT} = require('../../errors/errors.codes');
 module.exports = {
     getMyProfile: (req, res, next) => {
         try {
-            res.status('ok');
+            const unreadMessage = 5;
+
+            res.json({
+                ...req.user.toObject(),
+                additionalData: { unreadMessage }
+            });
         } catch (e) {
             next(e);
         }
@@ -33,12 +38,12 @@ module.exports = {
         }
     },
 
-    updateUser: async (req, res) => {
+    updateUser: async (req, res, next) => {
         try {
             const updatedUser = await usersService.updateUser(req.params.userId, req.body);
             res.json(updatedUser);
         } catch (e) {
-            console.log(e);
+            next(e);
         }
     },
 

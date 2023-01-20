@@ -3,6 +3,14 @@ const {buildFilterQuery} = require('./user.util');
 const oauthService = require('../../services/oauth.service');
 
 module.exports = {
+    /**
+     * @returns {Promise<User>}
+     * @param searchObject
+     */
+
+    findUserByParams: (searchObject) => {
+        return User.findOne(searchObject).select('+password');
+    },
 
     /**
      * @returns {Promise<{data: Array<User>, page: Number, perPage: Number, total: Number}>}
@@ -51,14 +59,5 @@ module.exports = {
         const hashPassword = await oauthService.hashPassword(userObject.password);
 
         return User.create({...userObject, password: hashPassword});
-    },
-
-    /**
-     * @returns {Promise<User>}
-     * @param searchObject
-     */
-
-    findUserByParams: (searchObject) => {
-        return User.findOne(searchObject);
     }
 };

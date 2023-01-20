@@ -8,6 +8,8 @@ const commonMdlwr = require('../../middlewares/common.middlewares');
 userRouter.get('/', controller.getAllUsers);
 userRouter.post('/', mdlwr.newUserValidator, mdlwr.checkUserDuplicates('email', 'body'), controller.createUser);
 
+userRouter.get('/profile', authMdlwr.validateAccessToken, controller.getMyProfile);
+
 userRouter.use('/:userId', commonMdlwr.objectIdValidator('userId'), mdlwr.getUserDynamically('userId', 'params', '_id'));
 
 userRouter.get('/:userId', controller.getUserById);

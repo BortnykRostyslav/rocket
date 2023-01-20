@@ -6,6 +6,14 @@ module.exports = {
     },
 
     getByParams: (searchData = {}) => {
-        return OAuth.findOne(searchData);
+        return OAuth.findOne(searchData).populate('user');
+    },
+
+    deleteOneByParams (deleteData = {}){
+        return  OAuth.deleteOne(deleteData);
+    },
+
+    deleteManyByParams (deleteData = {}){
+        return  OAuth.deleteMany(deleteData);
     }
 };

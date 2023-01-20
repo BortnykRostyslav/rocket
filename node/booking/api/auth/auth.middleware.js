@@ -11,13 +11,19 @@ module.exports = {
                 throw new Unauthorized('No token');
             }
 
+
             oathService.validateAccessToken(accessToken);
 
-            const info = await service.getByParams({accessToken});
+            const tokenWithUser = await service.getByParams({accessToken});
 
-            console.log(info);
 
-            req.user = {};
+            if(!tokenWithUser){
+                throw new Unauthorized('Invalid token');
+            }
+
+            console.log(tokenWithUser);
+
+            req.user = tokenWithUser.user;
             next();
         } catch (e) {
             next(e);
