@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config({path: path.join(__dirname, 'env', `.env.${process.env.NODE_ENV || 'local'}`)});
+global.rootPath = __dirname;
+
 
 const mainRouter = require('./api/api.router');
 const {PORT, MONGO_URL} = require('./configs/variables');

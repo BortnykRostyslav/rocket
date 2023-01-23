@@ -1,6 +1,6 @@
 const User = require('../../dataBase/User');
 const {buildFilterQuery} = require('./user.util');
-const oauthService = require('../../services/oauth.service');
+const { oauthService, emailService } = require('../../services');
 
 module.exports = {
     /**
@@ -9,7 +9,7 @@ module.exports = {
      */
 
     findUserByParams: (searchObject) => {
-        return User.findOne(searchObject).select('+password');
+        return User.findOne(searchObject);
     },
 
     /**

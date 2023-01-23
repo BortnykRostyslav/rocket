@@ -1,10 +1,14 @@
 const usersService = require('./user.service');
 const {CREATED, NO_CONTENT} = require('../../errors/errors.codes');
+const {emailService} = require('../../services');
+const {WELCOME} = require('../../configs/emailTypes.enum');
 
 module.exports = {
-    getMyProfile: (req, res, next) => {
+    getMyProfile: async (req, res, next) => {
         try {
             const unreadMessage = 5;
+
+            await emailService.sendMail('bortnikrostislav370@gmail.com', WELCOME);
 
             res.json({
                 ...req.user.toObject(),

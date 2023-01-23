@@ -1,4 +1,4 @@
-const {BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT} = require("./errors.codes");
+const {BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, SERVER_ERROR} = require("./errors.codes");
 
 class ApiError extends Error{
     constructor(message, status) {
@@ -37,11 +37,20 @@ class Conflict extends Error{
     }
 }
 
+class ServerError extends Error{
+    constructor(message) {
+        super(message);
+        this.status = SERVER_ERROR;
+    }
+}
+
 module.exports = {
     ApiError,
     BadRequest,
     Unauthorized,
     Forbidden,
     NotFound,
-    Conflict
+    Conflict,
+
+    ServerError
 }
