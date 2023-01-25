@@ -1,18 +1,27 @@
 const usersService = require('./user.service');
+const User = require('../../dataBase/User');
 const {CREATED, NO_CONTENT} = require('../../errors/errors.codes');
 const {emailService} = require('../../services');
 const {WELCOME} = require('../../configs/emailTypes.enum');
+const {ADMIN, USER} = require('../../configs/roles.enum');
 
 module.exports = {
     getMyProfile: async (req, res, next) => {
         try {
             const unreadMessage = 5;
+            const emailContext = {
+                name: req.user.firstName,
+                users: await User.find().lean(),
+                condition: false
+            };
 
-            await emailService.sendMail('bortnikrostislav370@gmail.com', WELCOME);
+            if (req.user.role === ADMIN) {
+                await emailService.sendMail('bortnikrostislav370@gmail.com', WELCOME, emailContext);
+            }
 
             res.json({
                 ...req.user.toObject(),
-                additionalData: { unreadMessage }
+                additionalData: {unreadMessage}
             });
         } catch (e) {
             next(e);
