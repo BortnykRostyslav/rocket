@@ -1,8 +1,10 @@
+const sgMail = require('@sendgrid/mail')
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 const path = require('node:path');
 
-const {NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASS, FRONTEND_URL} = require('../configs/variables');
+
+const {NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASS, FRONTEND_URL, SENDGRID_API_KEY} = require('../configs/variables');
 const templatesInfo = require('../emailTemplates');
 const { ServerError } = require('../errors/ApiError');
 
@@ -46,6 +48,29 @@ const sendMail =  (receiverEmail, emailType, context = {}) => {
     });
 };
 
+// const sendSGMail = (receiverEmail, emailType, context = {}) => {
+//     context = context || {};
+//
+//     const templateConfig = templatesInfo[emailType];
+//
+//     if(!templateConfig){
+//         throw new ServerError('Wrong template name');
+//     }
+//
+//     Object.assign(context, { frontendURL: FRONTEND_URL });
+//
+//     sgMail.setApiKey(SENDGRID_API_KEY);
+//
+//     sgMail.send({
+//         to: receiverEmail,
+//         from: 'bortnikrostislav370@gmail.com',
+//         subject: templateConfig.subject,
+//         text: 'HELLO WORD',
+//         html: '<h1>HELLO WORD</h1>'
+//     });
+// };
+
 module.exports = {
-    sendMail
+    sendMail,
+    // sendSGMail
 };
