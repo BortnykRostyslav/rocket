@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const OAuthSchema = new mongoose.Schema({
-        accessToken: {type: String, trim: true, required: true},
-        refreshToken: {type: String, trim: true, required: true},
+const ActionTokenSchema = new mongoose.Schema({
+        token: {type: String, trim: true, required: true},
+        actionToken: {type: String, trim: true, required: true},
         user: { type: mongoose.Schema.Types.ObjectId, trim: true, required: true, ref: 'User' }
     },
     {
@@ -13,4 +13,4 @@ const OAuthSchema = new mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model('OAuth', OAuthSchema);
+module.exports = mongoose.model('Action_Token', ActionTokenSchema);

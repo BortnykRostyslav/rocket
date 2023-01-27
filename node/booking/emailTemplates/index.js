@@ -1,4 +1,4 @@
-const {BANNED, WELCOME} = require('../configs/emailTypes.enum');
+const {BANNED, WELCOME, FORGOT_PASSWORD} = require('../configs/emailTypes.enum');
 
 module.exports = {
     [WELCOME]: {
@@ -8,5 +8,9 @@ module.exports = {
     [BANNED]: {
         templateName: 'banned',
         subject: 'Account was blocked'
+    },
+    [FORGOT_PASSWORD]: {
+        templateName: 'forgotPassword',
+        subject: 'Forgot Password'
     }
 };

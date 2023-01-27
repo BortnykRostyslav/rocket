@@ -1,4 +1,5 @@
 const OAuth = require('../../dataBase/OAuth');
+const ActionToken = require('../../dataBase/ActionToken');
 
 module.exports = {
     createOauthPair: (tokenData) => {
@@ -15,5 +16,12 @@ module.exports = {
 
     deleteManyByParams (deleteData = {}){
         return  OAuth.deleteMany(deleteData);
+    },
+
+
+    //Action Token Schema Functions
+
+    createActionToken(tokenData){
+        return ActionToken.create(tokenData);
     }
 };

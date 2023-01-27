@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const {BadRequest, Unauthorized} = require('../errors/ApiError');
+const {BadRequest, Unauthorized, ServerError} = require('../errors/ApiError');
 const {REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET} = require('../configs/variables');
+const { FORGOT_PASSWORD, CONFIRM_ACCOUNT } = require('../configs/actionTokenTypes.enum');
 
 const hashPassword = (password) => bcrypt.hash(password, 10);
 
@@ -35,12 +36,36 @@ const validateAccessToken = (accessToken = '') => {
         throw new Unauthorized(e.message || 'Invalid token');
     }
 
-}
+};
+
+const generateActionToken = (actionType, encodeData = {}) => {
+    let expiresIn = '72h';
+    let secretWord = '';
+
+    switch (actionType){
+        case FORGOT_PASSWORD:
+            expiresIn = '72h';
+            secretWord = 'ababab';
+            break
+
+        case CONFIRM_ACCOUNT:
+            expiresIn = '72h';
+            secretWord = 'ababab';
+            break
+
+        default:
+            throw new ServerError('Wrong action type')
+    }
+
+    return jwt.sign(encodeData, secretWord, { expiresIn });
+};
 
 module.exports = {
     hashPassword,
     checkPassword,
     generateNewAccessTokenPair,
+    generateActionToken,
     validateToken,
+
     validateAccessToken
 };
