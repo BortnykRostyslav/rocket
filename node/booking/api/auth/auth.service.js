@@ -23,5 +23,13 @@ module.exports = {
 
     createActionToken(tokenData){
         return ActionToken.create(tokenData);
+    },
+
+    deleteActionTokenByParams(deleteData) {
+        return  OAuth.deleteOne(deleteData);
+    },
+
+    findActionTokenByParams(searchData){
+        return ActionToken.findOne(searchData).populate('user');
     }
 };

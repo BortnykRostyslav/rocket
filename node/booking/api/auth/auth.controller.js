@@ -1,4 +1,5 @@
 const service = require('./auth.service');
+const userService = require('../user/user.service');
 const {oauthService, emailService} = require('../../services');
 const {NO_CONTENT} = require('../../errors/errors.codes');
 const {BANNED, FORGOT_PASSWORD} = require('../../configs/emailTypes.enum');
@@ -10,7 +11,7 @@ module.exports = {
         try {
             const user = req.locals.user;
 
-            await emailService.sendMail('bortnikrostislav370@gmail.com', BANNED);
+            //await emailService.sendMail('bortnikrostislav370@gmail.com', BANNED);
             await oauthService.checkPassword(user.password, req.body.password);
 
             const tokenPair = oauthService.generateNewAccessTokenPair({...user});
@@ -27,11 +28,11 @@ module.exports = {
 
     logoutUser: async (req, res, next) => {
         try {
-            // const accessToken = req.get('Authorization');
-            // await service.deleteOneByParams({accessToken});
-
             const accessToken = req.get('Authorization');
-            await service.deleteManyByParams({user: req.user._id});
+            await service.deleteOneByParams({accessToken});
+
+            // logout all platforms
+            // await service.deleteManyByParams({user: req.user._id});
             res.status(NO_CONTENT).json('ok');
         } catch (e) {
             next(e);
@@ -58,6 +59,21 @@ module.exports = {
 
             res.json('ok')
         } catch (e) {
+            next(e);
+        }
+    },
+
+    setForgotPassword: async (req, res, next) => {
+        try{
+            const { _id: userId } = req.user;
+
+            const hashPassword = await oauthService.hashPassword(req.body.password);
+
+            await userService.updateUser(userId, { password: hashPassword });
+            await service.deleteManyByParams({user: userId});
+
+            res.json('ok')
+        }catch (e) {
             next(e);
         }
     }

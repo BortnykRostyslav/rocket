@@ -40,17 +40,17 @@ const validateAccessToken = (accessToken = '') => {
 
 const generateActionToken = (actionType, encodeData = {}) => {
     let expiresIn = '72h';
-    let secretWord = '';
+    const secretWord = 'qwerty';
 
     switch (actionType){
         case FORGOT_PASSWORD:
             expiresIn = '72h';
-            secretWord = 'ababab';
+            //secretWord = 'qwerty';
             break
 
         case CONFIRM_ACCOUNT:
             expiresIn = '72h';
-            secretWord = 'ababab';
+            //secretWord = 'qwerty';
             break
 
         default:
@@ -60,6 +60,15 @@ const generateActionToken = (actionType, encodeData = {}) => {
     return jwt.sign(encodeData, secretWord, { expiresIn });
 };
 
+const validateActionToken = (token) => {
+    try {
+        return jwt.verify(token, 'qwerty');
+    } catch (e) {
+        throw new BadRequest(e.message || 'Invalid token');
+    }
+
+};
+
 module.exports = {
     hashPassword,
     checkPassword,
@@ -67,5 +76,6 @@ module.exports = {
     generateActionToken,
     validateToken,
 
-    validateAccessToken
+    validateAccessToken,
+    validateActionToken
 };

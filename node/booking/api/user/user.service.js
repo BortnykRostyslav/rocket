@@ -43,7 +43,7 @@ module.exports = {
     /**
      *
      * @param userId {String}
-     * @param newUserObject {{name: String}}
+     * @param newUserObject {Partial<User>}
      * @returns {Promise<User>}
      */
 
