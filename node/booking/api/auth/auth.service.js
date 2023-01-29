@@ -7,7 +7,7 @@ module.exports = {
     },
 
     getByParams: (searchData = {}) => {
-        return OAuth.findOne(searchData).populate('user');
+        return OAuth.findOne(searchData);
     },
 
     deleteOneByParams (deleteData = {}){
@@ -17,7 +17,6 @@ module.exports = {
     deleteManyByParams (deleteData = {}){
         return  OAuth.deleteMany(deleteData);
     },
-
 
     //Action Token Schema Functions
 
@@ -30,6 +29,6 @@ module.exports = {
     },
 
     findActionTokenByParams(searchData){
-        return ActionToken.findOne(searchData).populate('user');
+        return ActionToken.findOne(searchData);
     }
 };

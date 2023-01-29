@@ -13,4 +13,9 @@ const ActionTokenSchema = new mongoose.Schema({
     }
 );
 
+ActionTokenSchema.pre('findOne', function () {
+    this.populate('user');
+});
+
+
 module.exports = mongoose.model('Action_Token', ActionTokenSchema);
