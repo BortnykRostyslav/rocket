@@ -1,9 +1,9 @@
 const usersService = require('./user.service');
 const User = require('../../dataBase/User');
-const {CREATED, NO_CONTENT} = require('../../errors/errors.codes');
-const {emailService} = require('../../services');
-const {WELCOME} = require('../../configs/emailTypes.enum');
-const {ADMIN, USER} = require('../../configs/roles.enum');
+const { CREATED, NO_CONTENT } = require('../../errors/errors.codes');
+const { emailService, fileService } = require('../../services');
+const { WELCOME } = require('../../configs/emailTypes.enum');
+const { ADMIN, USER } = require('../../configs/roles.enum');
 
 module.exports = {
     getMyProfile: async (req, res, next) => {
@@ -65,6 +65,16 @@ module.exports = {
             await usersService.deleteUserById(req.params.userId);
 
             res.status(NO_CONTENT).end();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    uploadUserAvatar: async (req, res, next) => {
+        try {
+            const important = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
+
+            res.json(important);
         } catch (e) {
             next(e);
         }

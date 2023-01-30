@@ -15,7 +15,6 @@ userRouter.use('/:userId', commonMdlwr.objectIdValidator('userId'), mdlwr.getUse
 userRouter.get('/:userId', controller.getUserById);
 userRouter.put('/:userId',  controller.updateUser);
 userRouter.delete('/:userId', controller.deleteUser);
-
-userRouter.get('/profile', authMdlwr.validateAccessToken, controller.getMyProfile);
+userRouter.post('/:userId/avatar', mdlwr.checkUserAvatar, controller.uploadUserAvatar);
 
 module.exports = userRouter;
