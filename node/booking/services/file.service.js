@@ -11,16 +11,22 @@ const S3 = new AWS_S3({
     signatureVersion: 'v4'
 });
 
-function uploadFileToS3(file, itemId, itemType){
+async function uploadFileToS3(file, itemId, itemType){
     const Key = fileNameBuilder(file, itemId, itemType);
 
-    return S3.upload({
+    await S3
+        .upload({
         Bucket: S3_BUCKET,
         Body: file.data,
         Key,
-        ACL: 'public-read',
         ContentType: file.mimetype
     }).promise();         // is always required
+
+    return Key;
+}
+
+function getFileFromS3(Key){
+    return  S3.getSignedUrl('getObject', { Key, Bucket: S3_BUCKET, Expires: 5 * 60 });
 }
 
 function fileNameBuilder(file, itemId, itemType){
@@ -30,5 +36,6 @@ function fileNameBuilder(file, itemId, itemType){
 }
 
 module.exports = {
-    uploadFileToS3
+    uploadFileToS3,
+    getFileFromS3
 }

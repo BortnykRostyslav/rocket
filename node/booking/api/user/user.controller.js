@@ -72,9 +72,11 @@ module.exports = {
 
     uploadUserAvatar: async (req, res, next) => {
         try {
-            const important = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
+            const internalUrl = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
 
-            res.json(important);
+            await usersService.updateUser(req.params.userId, { avatar:internalUrl });
+
+            res.json({url: internalUrl});
         } catch (e) {
             next(e);
         }
