@@ -6,7 +6,7 @@ const userMdlwr = require('../user/user.middleware');
 const { FORGOT_PASSWORD } = require('../../configs/actionTokenTypes.enum');
 
 authRouter.post('/logout', mdlwr.validateAccessToken, controller.logoutUser);
-authRouter.post('/refresh', mdlwr.validateAccessToken, controller.logoutUser);
+authRouter.post('/refresh', mdlwr.validateRefreshToken, controller.refresh);
 authRouter.patch('/password/forgot', mdlwr.validateActionToken(FORGOT_PASSWORD), controller.setForgotPassword);
 
 

@@ -39,6 +39,25 @@ module.exports = {
         }
     },
 
+    refresh: async (req, res, next) =>{
+        try {
+            const user = req.user;
+
+            const refreshToken = req.get('Authorization');
+            await service.deleteOneByParams({refreshToken});
+
+            const tokenPair = oauthService.generateNewAccessTokenPair({...user});
+
+            await service.createOauthPair({...tokenPair, user: user._id});
+            res.json({
+                ...tokenPair,
+                user
+            });
+        } catch (e){
+            next(e);
+        }
+    },
+
     sendForgotPasswordEmail: async (req, res, next) => {
         try {
             const user = req.locals.user;

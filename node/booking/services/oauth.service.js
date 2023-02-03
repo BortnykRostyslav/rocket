@@ -25,10 +25,6 @@ const generateNewAccessTokenPair = (encodeData = {}) => {
     };
 };
 
-const validateToken = () => {
-
-};
-
 const validateAccessToken = (accessToken = '') => {
     try {
         return jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
@@ -36,6 +32,14 @@ const validateAccessToken = (accessToken = '') => {
         throw new Unauthorized(e.message || 'Invalid token');
     }
 
+};
+
+const validateRefreshToken = (refreshToken = '') => {
+    try {
+        return jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+    } catch (e) {
+        throw new Unauthorized(e.message || 'Invalid token');
+    }
 };
 
 const generateActionToken = (actionType, encodeData = {}) => {
@@ -74,8 +78,8 @@ module.exports = {
     checkPassword,
     generateNewAccessTokenPair,
     generateActionToken,
-    validateToken,
 
     validateAccessToken,
+    validateRefreshToken,
     validateActionToken
 };

@@ -29,6 +29,33 @@ module.exports = {
         }
     },
 
+    validateRefreshToken: async (req, res, next) => {
+        try {
+            const refreshToken = req.get('Authorization');
+
+            if (!refreshToken) {
+                throw new Unauthorized('No token');
+            }
+
+
+            oathService.validateRefreshToken(refreshToken);
+
+            const tokenWithUser = await service.getByParams({refreshToken});
+
+
+            if(!tokenWithUser){
+                throw new Unauthorized('Invalid token');
+            }
+
+            console.log(tokenWithUser);
+
+            req.user = tokenWithUser.user;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
     validateActionToken: (actionType) => async (req, res, next) => {
         try{
             const token = req.get('Authorization');
