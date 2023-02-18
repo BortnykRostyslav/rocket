@@ -1,7 +1,9 @@
 const usersService = require('./user.service');
-const { NotFound, BadRequest } = require('../../errors/ApiError');
+const { NotFound, BadRequest, Unauthorized} = require('../../errors/ApiError');
 const { newUserSchema } = require('./user.validator');
 const { IMAGE_MAX_SIZE, IMAGE_MIMETYPES } = require('../../configs/file.configs');
+const oathService = require('../../services/oauth.service');
+const service = require('../auth/auth.service');
 
 module.exports = {
     getUserDynamically: (paramName, from, dbField = paramName) => async (req, res, next) => {

@@ -11,7 +11,7 @@ module.exports = {
         try {
             const user = req.locals.user;
 
-            //await emailService.sendMail('bortnikrostislav370@gmail.com', BANNED);
+            //await emailService.sendMail(' ', BANNED);
             await oauthService.checkPassword(user.password, req.body.password);
 
             const tokenPair = oauthService.generateNewAccessTokenPair({...user});
