@@ -1,3 +1,4 @@
+require('module-alias/register');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -8,11 +9,10 @@ global.rootPath = __dirname;
 
 
 const mainRouter = require('./api/api.router');
-const {PORT, MONGO_URL} = require('./configs/variables');
+const {PORT, MONGO_URL} = require('@configs/variables');
 const {SERVER_ERROR} = require('./errors/errors.codes');
-const {NotFound} = require('./errors/ApiError');
+const {NotFound} = require('@error');
 const swaggerDocument = require('./swagger.json');
-
 const app = express();
 
 
@@ -27,6 +27,13 @@ app.use(fileUpload({
     limits: { fileSize: 200 * 1024 * 1024 },
 }));
 
+if(process.env.NODE_ENV !== 'prod'){
+    const morgan = require('morgan');
+
+    app.use(morgan('dev'));
+}
+
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', mainRouter);
 app.use('*', _notFoundError);
@@ -34,7 +41,7 @@ app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
     console.log('Listen', PORT);
-    require('./cronJobs');
+    // require('./cronJobs');
 });
 
 
