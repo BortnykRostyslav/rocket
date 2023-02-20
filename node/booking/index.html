@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button id='send'>
+    One-To-One
+</button>
+
+<button id='broadcast'>
+    Broadcast
+</button>
+
+<button id='joinRoom1'>
+    Room 1
+</button>
+
+<button id='joinRoom2'>
+    Room 2
+</button>
+
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+
+<script>
+    const socket = io('http://localhost:5000', {
+        query: 'token=HELLO_WORLDS&name=rostyslav',
+        auth: { token: 'Access_token_from_localstorage' }
+    });
+
+    const oneToOneButton = document.getElementById('send');
+    const broadcastButton = document.getElementById('broadcast');
+    const joinRoom1Button = document.getElementById('joinRoom1');
+    const joinRoom2Button = document.getElementById('joinRoom2');
+
+    oneToOneButton.onclick = () => {
+        socket.emit('send', { data: 1 });
+    }
+
+    broadcastButton.onclick = () => {
+        socket.emit('getBroadcast');
+    }
+
+    joinRoom1Button.onclick = () => {
+        socket.emit('room:join', { roomId: 1 });
+    }
+
+    joinRoom2Button.onclick = () => {
+        socket.emit('room:join', { roomId: 2 });
+    }
+
+    socket.on('newMessage', (payload) => {
+        alert(JSON.stringify(payload));
+    });
+
+    socket.on('forall', (req) => {
+        document.write(req);
+    });
+
+    socket.on('room:newUser', (userId) => {
+        alert(`${userId} join channel`)
+    })
+
+</script>
+
+
+
+</body>
+</html>
