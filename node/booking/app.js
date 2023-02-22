@@ -14,6 +14,7 @@ const {PORT, MONGO_URL} = require('@configs/variables');
 const {SERVER_ERROR} = require('./errors/errors.codes');
 const {NotFound} = require('@error');
 const swaggerDocument = require('./swagger.json');
+const socketUtils = require('./utils/socket/user-socket.util');
 const app = express();
 
 const server = http.createServer(app);
@@ -21,34 +22,52 @@ const server = http.createServer(app);
 const io = socketIO(server, { cors: { origin: '*' } });
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
-    console.log(socket.handshake);
+    socket.on('joinRoom', (roomData) => {
+        socket.join(roomData.room);
 
-    socket.on('send', (data) => {
-        console.log(data);
+        socketUtils.userJoinRoom(socket.id, roomData.username, roomData.room);
 
-        //SEND ON TO ONE
-        socket.emit('newMessage', { ok: true });
+        io
+            .to(roomData.room)
+            .emit('userList', {
+                chatName: roomData.room,
+                members: socketUtils.getChatMembers()
+            });
+
+
+        socket.broadcast
+            .to(roomData.room)
+            .emit('message', {
+                message: `${roomData.username} join room `,
+                senderName: 'System'
+            });
     });
 
-    socket.on('getBroadcast', () => {
-        //SEND FOR ALL CONNECTED CLIENTS
-        // io.emit('forall', 'TEST');
+    socket.on('chatMessages', (message) => {
+        const user = socketUtils.findUserBySocketId(socket.id);
 
-        //FOR ALL EXCEPT SENDER
-        socket.broadcast.emit('forall', 'I CANT SEE THIS');
+        if(!user){
+            return;
+        }
+
+        io
+            .to(user.roomName)
+            .emit('message', { message, senderName: user.userName });
     });
 
-    socket.on('room:join', (roomData) => {
-        socket.join(roomData.roomId);
+    socket.on('disconnect', () => {
+        const user = socketUtils.findUserBySocketId(socket.id);
 
-        // SEND TO ROOM CLIENTS EXPECT SENDER
-        // socket.to(roomData.roomId).emit('room:newUser', socket.id);
+        socketUtils.userLeaveRoom(socket.id);
+        socket.leave(user.roomName);
 
-        // SEND TO ROOM ALL ROOM CLIENTS
-        io.to(roomData.roomId).emit('room:newUser', socket.id);
-    });
-
+        io
+            .to(user.roomName)
+            .emit('userList', {
+                chatName: user.roomName,
+                members: socketUtils.getChatMembers()
+            });
+    })
 });
 
 mongoose.set('debug', true);
