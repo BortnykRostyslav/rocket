@@ -74,9 +74,47 @@ module.exports = {
         try {
             const internalUrl = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
 
-            await usersService.updateUser(req.params.userId, { avatar:internalUrl });
+            const uploadedAvatar = await usersService.uploadNewAvatar(req.params.userId, internalUrl);
 
-            res.json({url: internalUrl});
+            res.json(uploadedAvatar);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    setAvatarAsMain: async (req, res, next) => {
+        try {
+            const { avatarId } = req.params;
+
+            const updatedAvatarList = await usersService.setAvatarAsMain(avatarId);
+
+            res.json(updatedAvatarList);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    getUserAvatars:async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+
+            const avatarList = await usersService.getUserAvatars(userId);
+
+            res.json(avatarList);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    deleteUserAvatar: async (req, res, next) => {
+        try {
+            const { avatarId, userId } = req.params;
+
+            await usersService.deleteUserAvatar(avatarId);
+
+            const avatars = await usersService.getUserAvatars(userId);
+
+            res.json(avatars);
         } catch (e) {
             next(e);
         }

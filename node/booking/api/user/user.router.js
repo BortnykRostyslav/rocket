@@ -15,6 +15,10 @@ userRouter.use('/:userId', commonMdlwr.objectIdValidator('userId'), mdlwr.getUse
 userRouter.get('/:userId', controller.getUserById);
 userRouter.put('/:userId',  controller.updateUser);
 userRouter.delete('/:userId', controller.deleteUser);
-userRouter.post('/:userId/avatar', mdlwr.checkUserAvatar, controller.uploadUserAvatar);
+userRouter.patch('/:userId/avatars/:avatarId', controller.setAvatarAsMain);
+userRouter.delete('/:userId/avatars/:avatarId',  controller.deleteUserAvatar);
+userRouter.get('/:userId/avatars',  controller.getUserAvatars);
+userRouter.post('/:userId/avatars',mdlwr.checkUserAvatar, controller.uploadUserAvatar);
+
 
 module.exports = userRouter;

@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema({
         email: {type: String, trim: true, lowercase: true, required: true, unique: true},
         age: {type: Number,min: 8, max: 101, require: true},
         password: {type: String, min: 5, required: true, default: ""},
-        avatar: {type: String, default: ""},
         role: {type: String, enum: Object.values(rolesEnum), default: rolesEnum.USER}
     },
     {
@@ -25,7 +24,7 @@ const UserSchema = new mongoose.Schema({
                 for (const field of secureFields) {
                     delete ret[field];
                 }
-                
+
                 return ret;
             }
         },
@@ -44,6 +43,20 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.virtual('fullName').get(function(){
     return `${this.firstName} ${this.lastName}`.trim();
+});
+
+UserSchema.virtual('mainPhoto', {
+    ref: 'User_Avatar',
+    localField: '_id',
+    foreignField: '_user_id',
+    justOne: true,
+    options: {
+        sort: { updatedAt: -1 }
+    }
+});
+
+UserSchema.pre(/^find/, function() {
+    this.populate('mainPhoto');
 });
 
 module.exports = mongoose.model('User', UserSchema);

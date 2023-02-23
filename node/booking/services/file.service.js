@@ -29,13 +29,20 @@ function getFileFromS3(Key){
     return  S3.getSignedUrl('getObject', { Key, Bucket: S3_BUCKET, Expires: 5 * 60 });
 }
 
+function deleteImageFromS3(Key){
+    return S3.deleteObject({ Key, Bucket: S3_BUCKET }).promise();
+}
+
 function fileNameBuilder(file, itemId, itemType){
     const extension = path.extname(file.name); // .jpg
 
     return `${itemType}/${itemId}/${uuid()}${extension}`;
 }
 
+
+
 module.exports = {
     uploadFileToS3,
-    getFileFromS3
+    getFileFromS3,
+    deleteImageFromS3
 }
